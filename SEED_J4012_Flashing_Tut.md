@@ -52,12 +52,14 @@ These instructions guide you through setting up a **Live Ubuntu USB**, configuri
 ---
 
 ## **Step 3: Copy Jetson Flashing Files to USB Storage**
-1. **Download the necessary Jetson files to the Live USB session.**  
-2. **Move the extracted files to the mounted USB drive**:  
+1. **Check the official tutorial for the latest download links:**  
+   🔗 [Seeed Studio: Flash JetPack on reComputer J4012](https://wiki.seeedstudio.com/reComputer_J4012_Flash_Jetpack/)
+2. **Download the necessary Jetson files to the Live USB session.**  
+3. **Move the extracted files to the mounted USB drive** (this USB will serve as the working directory for completing the flashing process):  
    ```bash
    sudo cp -r /path/to/Jetson_Files /mnt/jetson/
    ```
-3. **Verify ownership and permissions**:  
+4. **Verify ownership and permissions**:  
    ```bash
    sudo chown -R ubuntu:ubuntu /mnt/jetson
    sudo chmod -R 777 /mnt/jetson
@@ -78,46 +80,11 @@ These instructions guide you through setting up a **Live Ubuntu USB**, configuri
 
 ---
 
-## **Step 5: Apply Binaries & Flash the Jetson**
-1. **Apply NVIDIA binaries** (this process may take a long time, especially on slow USBs):  
-   ```bash
-   sudo ./apply_binaries.sh
-   ```
-   - **Expected behavior**:  
-     - Unpacking files (`nvidia-l4t-core`, `nvidia-l4t-kernel-headers`, etc.).  
-     - Slow speeds (especially on USB 2.0).  
-     - May take **10-30 minutes**, depending on USB speed.  
+## **Step 5: Continue with Flashing Instructions**
+To proceed with flashing the Jetson device, follow the official instructions here:  
+🔗 [Seeed Studio: Flash JetPack on reComputer J4012](https://wiki.seeedstudio.com/reComputer_J4012_Flash_Jetpack/)
 
-2. **(Optional) Set Default User to Skip Initial Setup**  
-   ```bash
-   sudo tools/l4t_create_default_user.sh -u ubuntu -p ubuntu -a -n jetson --accept-license
-   ```
-
-3. **Run the Flashing Script**  
-   - The exact command will depend on the JetPack version and target device.  
-   - Run the required flash script inside `/mnt/jetson/Linux_for_Tegra/`.
-
----
-
-## **Step 6: First Boot & Troubleshooting**
-1. **Boot the Jetson Device**  
-   - Ensure the **USB storage device remains plugged in** (if the OS was installed there).  
-   - The device may take a while to boot for the first time.  
-
-2. **If Stuck on Ubuntu Logo / Splash Screen:**  
-   - **Try accessing a TTY terminal**:  
-     ```bash
-     Ctrl + Alt + F2
-     ```
-   - **Check system logs**:  
-     ```bash
-     dmesg | less
-     journalctl -xe
-     ```
-
-3. **If Reflashing is Needed:**  
-   - Boot into the Live USB again and restart the process.  
-   - Use `lsblk` to confirm that the storage drive is properly detected before flashing.
+📌 **Note:** All commands in the official tutorial should be run from the **mounted USB directory** (`/mnt/jetson`), where the JetPack files were moved earlier.
 
 ---
 
@@ -139,7 +106,7 @@ These instructions guide you through setting up a **Live Ubuntu USB**, configuri
 ✔ **Set up Live USB**  
 ✔ **Mount and prepare USB as storage**  
 ✔ **Copy and apply permissions to Jetson files**  
-✔ **Run apply_binaries & flash the device**  
-✔ **Troubleshoot boot issues if needed**  
+✔ **Grant root access for flashing**  
+✔ **Follow the official Seeed Studio guide to flash the device**  
 
-Let me know if you want any refinements!
+Let me know if you want any refinements! 🚀

@@ -1,0 +1,145 @@
+### **Work Instructions: Flashing Jetson ReComputer J4012 Using a Live USB and USB as Storage**  
+
+These instructions guide you through setting up a **Live Ubuntu USB**, configuring an external **USB drive as the primary storage**, and preparing the system for flashing a **Jetson device**.
+
+---
+
+## **Step 1: Prepare the Live USB**
+1. **Download Ubuntu ISO**  
+   - Obtain the latest **Ubuntu Desktop ISO** (recommended version: **Ubuntu 20.04+**).
+  
+2. **Create the Live USB**  
+   - Use **Rufus** (Windows) or `dd` (Linux/macOS) to write the ISO to a **USB flash drive** (minimum **8GB** recommended).  
+   - If using Rufus:  
+     - Select **MBR** partition scheme.  
+     - Use **FAT32** for compatibility.  
+     - Enable **Persistent Storage** if you want to keep changes after reboot.  
+
+3. **Boot from the Live USB**  
+   - Insert the Live USB into the **host PC**.  
+   - Enter BIOS/boot menu and boot from the USB.  
+   - Select **"Try Ubuntu"** (do not install).  
+
+---
+
+## **Step 2: Set Up External USB as the Storage Device**
+1. **Insert the USB drive** (this will act as the working storage).  
+2. **Find the USB device name**:  
+   ```bash
+   lsblk
+   ```
+   - Look for a drive like `/dev/sdb` (size should match your USB drive).  
+
+3. **Format the USB drive**:  
+   - If you need a fresh setup, format it as **ext4**:  
+     ```bash
+     sudo mkfs.ext4 /dev/sdX
+     ```
+     *(Replace `sdX` with the correct drive name, e.g., `sdb`.)*  
+
+4. **Mount the USB drive for use**:  
+   ```bash
+   sudo mkdir -p /mnt/jetson
+   sudo mount /dev/sdX /mnt/jetson
+   ```
+   *(Replace `sdX` with your actual device name.)*  
+
+5. **Give full permissions**:  
+   ```bash
+   sudo chmod -R 777 /mnt/jetson
+   ```
+
+---
+
+## **Step 3: Copy Jetson Flashing Files to USB Storage**
+1. **Download the necessary Jetson files to the Live USB session.**  
+2. **Move the extracted files to the mounted USB drive**:  
+   ```bash
+   sudo cp -r /path/to/Jetson_Files /mnt/jetson/
+   ```
+3. **Verify ownership and permissions**:  
+   ```bash
+   sudo chown -R ubuntu:ubuntu /mnt/jetson
+   sudo chmod -R 777 /mnt/jetson
+   ```
+
+---
+
+## **Step 4: Grant Root Access for Flashing**
+1. **Open a root shell**:  
+   ```bash
+   sudo -i
+   ```
+   *(This ensures all commands have the necessary privileges.)*  
+2. **Navigate to the working directory**:  
+   ```bash
+   cd /mnt/jetson/Linux_for_Tegra/
+   ```
+
+---
+
+## **Step 5: Apply Binaries & Flash the Jetson**
+1. **Apply NVIDIA binaries** (this process may take a long time, especially on slow USBs):  
+   ```bash
+   sudo ./apply_binaries.sh
+   ```
+   - **Expected behavior**:  
+     - Unpacking files (`nvidia-l4t-core`, `nvidia-l4t-kernel-headers`, etc.).  
+     - Slow speeds (especially on USB 2.0).  
+     - May take **10-30 minutes**, depending on USB speed.  
+
+2. **(Optional) Set Default User to Skip Initial Setup**  
+   ```bash
+   sudo tools/l4t_create_default_user.sh -u ubuntu -p ubuntu -a -n jetson --accept-license
+   ```
+
+3. **Run the Flashing Script**  
+   - The exact command will depend on the JetPack version and target device.  
+   - Run the required flash script inside `/mnt/jetson/Linux_for_Tegra/`.
+
+---
+
+## **Step 6: First Boot & Troubleshooting**
+1. **Boot the Jetson Device**  
+   - Ensure the **USB storage device remains plugged in** (if the OS was installed there).  
+   - The device may take a while to boot for the first time.  
+
+2. **If Stuck on Ubuntu Logo / Splash Screen:**  
+   - **Try accessing a TTY terminal**:  
+     ```bash
+     Ctrl + Alt + F2
+     ```
+   - **Check system logs**:  
+     ```bash
+     dmesg | less
+     journalctl -xe
+     ```
+
+3. **If Reflashing is Needed:**  
+   - Boot into the Live USB again and restart the process.  
+   - Use `lsblk` to confirm that the storage drive is properly detected before flashing.
+
+---
+
+### **Notes:**
+- Using **persistent storage** on a Live USB can help, but a **full install on a USB drive** is more reliable.  
+- **USB 3.0+ is strongly recommended** for better write speeds.  
+- **If using a slow USB**, expect `apply_binaries.sh` and `syncing system.img` to take **significantly longer** than on an SSD.  
+- When troubleshooting, always check `iotop` and `top` to monitor **disk activity and CPU usage**.
+
+---
+
+### **Future Use:**
+- These steps remain the same for **future JetPack versions**, with the only variation being the **flashing script**.  
+- Keeping an **Ubuntu full installation on a USB drive** makes the setup more stable for future flashing.
+
+---
+
+### **Summary:**
+✔ **Set up Live USB**  
+✔ **Mount and prepare USB as storage**  
+✔ **Copy and apply permissions to Jetson files**  
+✔ **Run apply_binaries & flash the device**  
+✔ **Troubleshoot boot issues if needed**  
+
+Let me know if you want any refinements!

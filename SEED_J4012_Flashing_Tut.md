@@ -4,6 +4,22 @@ These instructions guide you through setting up a **Live Ubuntu USB**, configuri
 
 ---
 
+Guide for flashing Seed J40/30 Carrier Board using Ubuntu Live USB
+
+Outline: 
+   As a student I really want to have reliabiltiy with my computer, so when it came to choosing a main OS I went with the easy option Windows. Eventually I got the reComputer j4012 (and accidenatlly corrupted the jetpack install instantly) so I had to flash it. Only issue is to flash it I needed a non ARM host machine with Ubuntu installed. I didn't want to dual boot ubuntu and windows since I only have one drive in my computer right now and I still wanted to have windows for ease of use. My workaround was to flash the board using a live version of Ubunut running off of a USB. As a bonus since this setup is modular as long you save the flashing files to the usb you only have to set this oe once and can jsut boot into Ubunut and mount the usb and flash from there. 
+
+Steps : 
+
+0: back up windows - make live ubuntu usb give link 
+1: Turn off Secure boot and boot into Ubuntu 
+2: mount and foirmat extra usb
+3:download files
+4: copy to usb and change permissions
+5: open root terminal in usb and start flashing 
+
+
+
 ## **Step 1: Prepare the Live USB**
 1. **Download Ubuntu ISO**  
    - Obtain the latest **Ubuntu Desktop ISO** (recommended version: **Ubuntu 20.04+**).
